@@ -40,6 +40,7 @@ Vagrant.configure('2') do |config|
     aws.secret_access_key = '<aws-secret-key>'
     aws.keypair_name = '<keypair-name>'
     aws.security_groups = '<security-group-id>'
+    aws.ami = '' # this is due to a bug, see https://github.com/mitchellh/vagrant-aws/issues/330
 
     aws.block_device_mapping = [
       {
