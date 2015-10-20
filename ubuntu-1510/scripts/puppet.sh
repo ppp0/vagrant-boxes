@@ -1,7 +1,7 @@
 # Prepare puppetlabs repo
-wget http://apt.puppetlabs.com/puppetlabs-release-wheezy.deb
-dpkg -i puppetlabs-release-wheezy.deb
-rm puppetlabs-release-wheezy.deb
+wget https://apt.puppetlabs.com/puppetlabs-release-utopic.deb
+dpkg -i puppetlabs-release-utopic.deb
+rm puppetlabs-release-utopic.deb
 apt-get update
 
 # Install puppet/facter
