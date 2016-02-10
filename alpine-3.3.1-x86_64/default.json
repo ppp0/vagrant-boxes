@@ -1,0 +1,95 @@
+{
+  "builders": [
+    {
+      "name": "virtualbox",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "root<enter><wait>",
+        "nc -lp 22&<enter>",
+        "ifconfig eth0 up && udhcpc -i eth0<enter><wait5>",
+        "setup-alpine<enter><wait>",
+        "de<enter>",
+        "de_CH-latin1<enter>",
+        "alpine<enter>",
+        "done<enter>no<enter><enter><enter>",
+        "vagrant<enter>",
+        "vagrant<enter>",
+        "UTC<enter><wait5><enter>",
+        "f<enter><wait15>",
+        "openssh<enter><wait10>",
+        "openntpd<enter><wait>",
+        "sda<enter>",
+        "sys<enter>",
+        "y<enter><wait10><wait10>",
+        "killall -9 nc<enter>",
+        "service sshd stop<enter>",
+        "sysctl -w kernel.grsecurity.chroot_caps=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_chmod=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_chroot=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_fchdir=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_mknod=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_mount=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_pivot=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_shmat=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_sysctl=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_deny_unix=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_enforce_chdir=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_findtask=0<enter>",
+        "sysctl -w kernel.grsecurity.chroot_restrict_nice=0<enter>",
+        "mount /dev/sda3 /mnt<enter><wait>",
+        "mount -o bind /dev /mnt/dev<enter>",
+        "chroot /mnt<enter>",
+        "ln -sf /bin/ash /bin/bash<enter>",
+        "mount -t proc none /proc<enter>",
+        "mount -t devpts devpts /dev/pts<enter>",
+        "apk add sudo wget bash virtualbox-additions-grsec<enter><wait10><wait10>",
+        "adduser vagrant<enter>vagrant<enter>vagrant<enter>",
+        "killall -9 udhcpc<enter>",
+        "ifconfig eth1 down<enter>",
+        "setup-interfaces<enter>",
+        "eth0<enter>",
+        "dhcp<enter>",
+        "done<enter>no<enter>",
+        "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers<enter>",
+        "/usr/sbin/sshd<enter>",
+        "ifup eth0<enter>"
+      ],
+      "boot_wait": "30s",
+      "disk_size": 20000,
+      "guest_os_type": "Linux_64",
+      "http_directory": "http",
+      "iso_checksum": "0c6be63cbeab562e805b0e337edbc363e8f1291f67e6f9cb0f2daf6695587157",
+      "iso_checksum_type": "sha256",
+      "iso_url": "file:///Users/cargomedia/Downloads/alpine-3.3.1-x86_64.iso",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "shutdown_command": "echo 'vagrant'|sudo -S poweroff",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "2048"],
+        ["modifyvm", "{{.Name}}", "--cpus", "1"],
+        ["modifyvm", "{{.Name}}", "--nic1", "bridged", "--cableconnected1", "on", "--bridgeadapter1", "en0"]
+      ],
+      "vm_name": "alpine-3.3.1-x86_64-default",
+      "headless": true
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "artifacts/{{.BuildName}}/alpine-3.3.1-x86_64-default.box"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/vagrant.sh"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+    }
+  ]
+}

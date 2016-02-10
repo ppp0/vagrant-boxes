@@ -17,9 +17,13 @@ aws = VagrantBoxes::Aws.new(aws_key_id, aws_key_secret)
 vagrant_cloud = VagrantCloud::Account.new(vagrant_cloud_username, vagrant_cloud_access_token)
 environment = VagrantBoxes::Environment.new(File.dirname(__FILE__), aws, vagrant_cloud)
 
+targets = ['debian-7-amd64-cm', 'debian-8-amd64-default', 'debian-8-amd64-plain', 'alpine-3.3.1-x86_64-default']
+targets = ['alpine-3.3.1-x86_64-default']
+
 desc 'Build all boxes'
 task :build do |t|
   environment.find_templates.each do |template|
+    next if ! targets.include?(template.name)
     puts "Building #{template.name}..."
     template.build!(builders)
   end
@@ -28,6 +32,7 @@ end
 desc 'Run serverspec tests (virtualbox build only!)'
 task :spec do |t|
   environment.find_templates.each do |template|
+    next if ! targets.include?(template.name)
     puts "Validating #{template.name}..."
     task = RSpec::Core::RakeTask.new(template.name)
     box_path = template.output_path('virtualbox')
@@ -48,6 +53,7 @@ end
 desc 'Release boxes to S3 and Vagrant Cloud'
 task :release do |t|
   environment.find_templates.each do |template|
+    next if ! targets.include?(template.name)
     version = template.next_version
     environment.add_rollback(Proc.new { version.delete })
     puts "Releasing #{template.name} version #{version}..."
