@@ -2,10 +2,14 @@ Vagrant boxes
 =============
 Generate [Vagrant](http://www.vagrantup.com/) boxes with [packer](http://www.packer.io/).
 
-There are three flavors available:
+You have the choice between these flavors:
 - `debian-7-amd64-plain`: Minimalistic Debian with Virtualbox-additions where applicable.
 - `debian-7-amd64-default`: Like above, plus `git`, `rsync`, `ruby` and `puppet`.
 - `debian-7-amd64-cm`: Like above, plus [CM framework](https://github.com/cargomedia/cm) dependencies.
+- `debian-8-amd64-plain`: Debian-8 Jessie incarnation of the above
+- `debian-8-amd64-default`: Debian-8 Jessie incarnation of the above
+- `ubuntu-1504-plain`: Ubuntu Vivid Vervet (15.04) incarnation of the above
+- `ubuntu-1504-default`: Ubuntu Vivid Vervet (15.04) incarnation of the above
 
 Boxes are built and released on [Vagrant Cloud](https://vagrantcloud.com/cargomedia) for `virtualbox` and `aws`.
 
@@ -36,6 +40,7 @@ Vagrant.configure('2') do |config|
 
     aws.region = 'eu-west-1'
     aws.instance_type = 'm3.large'
+    aws.ami = '' # due to a bug, see https://github.com/mitchellh/vagrant-aws/issues/330
     aws.access_key_id = '<aws-access-key>'
     aws.secret_access_key = '<aws-secret-key>'
     aws.keypair_name = '<keypair-name>'

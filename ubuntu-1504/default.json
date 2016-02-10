@@ -4,29 +4,31 @@
       "name": "virtualbox",
       "type": "virtualbox-iso",
       "boot_command": [
-        "<esc><wait>",
-        "install ",
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
         "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
         "debian-installer=en_US ",
         "auto ",
         "locale=en_US ",
         "kbd-chooser/method=de ",
         "netcfg/get_hostname={{ .Name }} ",
-        "netcfg/get_domain=vagrantup.com ",
         "fb=false ",
         "debconf/frontend=noninteractive ",
         "console-setup/ask_detect=false ",
-        "console-keymaps-at/keymap=en_US ",
-        "keyboard-configuration/xkb-keymap=en_US ",
+        "keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA ",
+        "passwd/user-fullname=vagrant ",
+        "passwd/user-password=vagrant ",
+        "passwd/user-password-again=vagrant ",
+        "passwd/username=vagrant ",
         "<enter>"
       ],
       "boot_wait": "3s",
       "disk_size": 30000,
-      "guest_os_type": "Debian_64",
+      "guest_os_type": "Ubuntu_64",
       "http_directory": "http",
-      "iso_checksum": "774d1fc8c5364e63b22242c33a89c1a3",
-      "iso_checksum_type": "md5",
-      "iso_url": "http://cdimage.debian.org/cdimage/archive/7.9.0/amd64/iso-cd/debian-7.9.0-amd64-netinst.iso",
+      "iso_checksum_type": "sha1",
+      "iso_checksum": "97282a3b066de4ee4c9409979737f3911f95ceab",
+      "iso_url": "http://archive.ubuntu.com/ubuntu/dists/vivid/main/installer-amd64/current/images/netboot/mini.iso",
       "shutdown_command": "sudo poweroff",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -37,17 +39,17 @@
         ["modifyvm", "{{.Name}}", "--memory", "4096"],
         ["modifyvm", "{{.Name}}", "--cpus", "1"]
       ],
-      "vm_name": "debian-7-amd64-default",
+      "vm_name": "ubuntu-1504-amd64-default",
       "headless": true
     },
     {
       "name": "aws",
       "type": "amazon-ebs",
       "region": "eu-west-1",
-      "source_ami": "ami-61e56916",
+      "source_ami": "ami-e38ab694",
       "instance_type": "m3.large",
-      "ssh_username": "admin",
-      "ami_name": "debian-7-amd64-default {{timestamp}}",
+      "ssh_username": "ubuntu",
+      "ami_name": "ubuntu-1504-amd64-default {{timestamp}}",
       "ami_description": "https://github.com/cargomedia/vagrant-boxes",
       "ami_groups": ["all"],
       "ami_regions": ["us-east-1"],
@@ -57,7 +59,7 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "artifacts/{{.BuildName}}/debian-7-amd64-default.box"
+      "output": "artifacts/{{.BuildName}}/ubuntu-1504-amd64-default.box"
     }
   ],
   "provisioners": [
